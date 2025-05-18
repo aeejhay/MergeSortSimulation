@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deadlock Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    .thread, .resource {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin: 10px;
+      font-weight: bold;
+    }
+    .thread {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .resource {
+      background-color: #f39c12;
+      color: white;
+    }
+    .arrow {
+      font-size: 24px;
+      display: block;
+      margin: 5px 0;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .block {
+      border: 2px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      width: 200px;
+    }
+    .highlight {
+      background-color: red !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>Deadlock Simulation: T1, T2, T3</h1>
+  <div class="container">
+    <div class="block" id="T1">
+      <div class="thread">T1</div>
+      <div class="arrow">holds →</div>
+      <div class="resource">Resource A</div>
+      <div class="arrow">wants →</div>
+      <div class="resource">Resource B</div>
+    </div>
+
+    <div class="block" id="T2">
+      <div class="thread">T2</div>
+      <div class="arrow">holds →</div>
+      <div class="resource">Resource B</div>
+      <div class="arrow">wants →</div>
+      <div class="resource">Resource C</div>
+    </div>
+
+    <div class="block" id="T3">
+      <div class="thread">T3</div>
+      <div class="arrow">holds →</div>
+      <div class="resource">Resource C</div>
+      <div class="arrow">wants →</div>
+      <div class="resource">Resource A</div>
+    </div>
+  </div>
+
+  <p style="margin-top: 30px; font-weight: bold; color: red; font-size: 18px;">
+    ⚠️ All threads are blocked — this is a DEADLOCK situation.
+  </p>
+
+  <script>
+    // Simulate a flashing deadlock state
+    const blocks = [document.getElementById("T1"), document.getElementById("T2"), document.getElementById("T3")];
+
+    setInterval(() => {
+      blocks.forEach(block => block.classList.toggle("highlight"));
+    }, 800);
+  </script>
+</body>
+</html>
