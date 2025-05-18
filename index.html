@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merge Sort Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .array {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .element {
+      width: 50px;
+      height: 50px;
+      background-color: #007bff;
+      color: white;
+      line-height: 50px;
+      font-size: 18px;
+      border-radius: 6px;
+      transition: all 0.5s;
+    }
+    .highlight {
+      background-color: orange !important;
+    }
+    .sorted {
+      background-color: green !important;
+    }
+    .sub-array {
+      margin: 20px 0;
+      padding: 10px;
+      border: 1px dashed #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Merge Sort Simulation - Divide and Conquer</h1>
+  <div id="array" class="array"></div>
+  <div id="log"></div>
+
+  <script>
+    const array = [2, 5, 3, 1, 7, 10, 11];
+    const container = document.getElementById("array");
+    const log = document.getElementById("log");
+
+    function renderArray(arr) {
+      container.innerHTML = "";
+      arr.forEach(val => {
+        const div = document.createElement("div");
+        div.className = "element";
+        div.textContent = val;
+        container.appendChild(div);
+      });
+    }
+
+    async function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function mergeSort(arr, left, right, level = 0) {
+      if (right - left <= 1) return;
+      const mid = Math.floor((left + right) / 2);
+
+      logStep(`Dividing: [${arr.slice(left, right).join(", ")}]`);
+      await sleep(800);
+
+      await mergeSort(arr, left, mid, level + 1);
+      await mergeSort(arr, mid, right, level + 1);
+      await merge(arr, left, mid, right);
+    }
+
+    async function merge(arr, left, mid, right) {
+      const leftPart = arr.slice(left, mid);
+      const rightPart = arr.slice(mid, right);
+      let i = 0, j = 0, k = left;
+
+      while (i < leftPart.length && j < rightPart.length) {
+        highlight(k);
+        await sleep(400);
+        if (leftPart[i] <= rightPart[j]) {
+          arr[k++] = leftPart[i++];
+        } else {
+          arr[k++] = rightPart[j++];
+        }
+        renderArray(arr);
+        await sleep(400);
+      }
+      while (i < leftPart.length) {
+        highlight(k);
+        await sleep(400);
+        arr[k++] = leftPart[i++];
+        renderArray(arr);
+        await sleep(400);
+      }
+      while (j < rightPart.length) {
+        highlight(k);
+        await sleep(400);
+        arr[k++] = rightPart[j++];
+        renderArray(arr);
+        await sleep(400);
+      }
+
+      logStep(`Merged: [${arr.slice(left, right).join(", ")}]`);
+    }
+
+    function highlight(index) {
+      const elements = document.querySelectorAll(".element");
+      elements.forEach(el => el.classList.remove("highlight"));
+      if (elements[index]) elements[index].classList.add("highlight");
+    }
+
+    function logStep(message) {
+      const div = document.createElement("div");
+      div.className = "sub-array";
+      div.textContent = message;
+      log.appendChild(div);
+    }
+
+    async function start() {
+      renderArray(array);
+      await sleep(1000);
+      await mergeSort(array, 0, array.length);
+      document.querySelectorAll(".element").forEach(el => el.classList.add("sorted"));
+    }
+
+    start();
+  </script>
+</body>
+</html>
