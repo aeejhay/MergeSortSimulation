@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starvation Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .thread {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 20px;
+      border-radius: 6px;
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+      transition: all 0.4s ease;
+    }
+    .T1 { background-color: green; }
+    .T2 { background-color: blue; }
+    .T3 { background-color: gray; opacity: 0.5; }
+
+    .running {
+      animation: pulse 0.6s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .caption {
+      margin-top: 30px;
+      font-weight: bold;
+      color: darkred;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Starvation Simulation</h1>
+  <div>
+    <div id="t1" class="thread T1">Thread T1</div>
+    <div id="t2" class="thread T2">Thread T2</div>
+    <div id="t3" class="thread T3">Thread T3 (Starving)</div>
+  </div>
+
+  <p class="caption">
+    ⚠️ T3 is ready, but constantly overlooked due to higher priority threads.
+  </p>
+
+  <script>
+    const t1 = document.getElementById("t1");
+    const t2 = document.getElementById("t2");
+    const t3 = document.getElementById("t3");
+
+    let tick = 0;
+    setInterval(() => {
+      tick++;
+      t1.classList.add("running");
+      t2.classList.add("running");
+
+      // T3 never runs (starvation)
+      t3.classList.remove("running");
+
+      setTimeout(() => {
+        t1.classList.remove("running");
+        t2.classList.remove("running");
+      }, 400);
+    }, 1000);
+  </script>
+</body>
+</html>
